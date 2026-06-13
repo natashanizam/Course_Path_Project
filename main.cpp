@@ -1,23 +1,9 @@
-/*
- * ============================================================
- *   COURSE RECOMMENDATION SYSTEM  v3.0
- *   Data Structures Used:
- *     - Graph (Adjacency List)
- *     - Linked List
- *     - Queue
- *     - Stack
- *   Features:
- *     - Topological Sort
- *     - File I/O
- * ============================================================
- */
-
 #include <iostream>
 #include <string>
 #include <fstream>
 using namespace std;
 
-/* ===================== LINKED LIST ===================== */
+/* ===== LINKED LIST ===== */
 
 class CompletedNode {
 public:
@@ -41,7 +27,7 @@ void addCompleted(CompletedNode*& head, string sub, float grade, int credits) {
 }
 
 bool isCompleted(CompletedNode* head, string sub) {
-    while (head != nullptr) {
+    while (head) {
         if (head->subject == sub) return true;
         head = head->next;
     }
@@ -70,15 +56,6 @@ void removeCompleted(CompletedNode*& head, string sub) {
     }
 }
 
-int countCompleted(CompletedNode* head) {
-    int count = 0;
-    while (head) {
-        count++;
-        head = head->next;
-    }
-    return count;
-}
-
 void displayCompleted(CompletedNode* head) {
     cout << "\nCompleted Subjects:\n";
 
@@ -101,7 +78,7 @@ void displayCompleted(CompletedNode* head) {
         cout << "CGPA: " << totalPoints / totalCredits << "\n";
 }
 
-/* ===================== STACK ===================== */
+/* ===== STACK ===== */
 
 class StackNode {
 public:
@@ -127,20 +104,9 @@ public:
         n->next = top;
         top = n;
     }
-
-    bool pop(string& s, float& g, int& c) {
-        if (!top) return false;
-        StackNode* temp = top;
-        s = top->subject;
-        g = top->grade;
-        c = top->credits;
-        top = top->next;
-        delete temp;
-        return true;
-    }
 };
 
-/* ===================== QUEUE ===================== */
+/* ===== QUEUE ===== */
 
 class QueueNode {
 public:
@@ -181,7 +147,7 @@ public:
     }
 };
 
-/* ===================== GRAPH ===================== */
+/* ===== GRAPH ===== */
 
 class AdjNode {
 public:
@@ -212,7 +178,6 @@ public:
 class Graph {
 public:
     GraphNode* head = nullptr;
-    int totalSubjects = 0;
 
     void addSubject(string n, int c) {
         GraphNode* node = new GraphNode(n, c);
@@ -222,7 +187,6 @@ public:
             while (temp->next) temp = temp->next;
             temp->next = node;
         }
-        totalSubjects++;
     }
 
     GraphNode* findSubject(string n) {
@@ -267,17 +231,9 @@ public:
             temp = temp->next;
         }
     }
-
-    void display() {
-        GraphNode* temp = head;
-        while (temp) {
-            cout << temp->name << " (" << temp->credits << ")\n";
-            temp = temp->next;
-        }
-    }
 };
 
-/* ===================== FILE I/O ===================== */
+/* ===== FILE I/O ===== */
 
 const string FILE_NAME = "progress.txt";
 
@@ -291,19 +247,7 @@ void saveProgress(CompletedNode* head) {
     }
 }
 
-void loadProgress(CompletedNode*& head, Stack& s) {
-    ifstream file(FILE_NAME);
-    string sub;
-    float g;
-    int c;
-
-    while (file >> sub >> g >> c) {
-        addCompleted(head, sub, g, c);
-        s.push(sub, g, c);
-    }
-}
-
-/* ===================== MAIN ===================== */
+/* ===== MAIN ===== */
 
 Graph buildGraph() {
     Graph g;
